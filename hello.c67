@@ -1,0 +1,3 @@
+hello = {
+    println("hello c67game")
+}

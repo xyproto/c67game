@@ -4,21 +4,21 @@ hello = {
     println("Hello from c67game!")
 }
 
-greet = name:str {
+greet = (name: str) -> {
     println("Hello, " + name + "!")
 }
 
-countdown = n:int {
-    loop i = n, i >= 0, i = i - 1 {
-        println(i)
+countdown = (n: num) -> {
+    @ i in n + 1 {
+        println(n - i)
     }
     println("Blast off!")
 }
 
-square = x:int -> int {
+square = (x: num) -> num {
     ret x * x
 }
 
-add = a:int, b:int -> int {
+add = (a: num, b: num) -> num {
     ret a + b
 }

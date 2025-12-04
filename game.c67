@@ -2,52 +2,18 @@ export *
 
 import "sdl3" as sdl
 
-window := 0
-renderer := 0
-is_running := 0
-
-init_game = (width, height, title) -> {
-    sdl.SDL_Init(0x00000020)
-    window <- sdl.SDL_CreateWindow(title, width, height, 0)
-    renderer <- sdl.SDL_CreateRenderer(window, 0)
-    is_running <- 1
+hello = {
+    println("Hello from c67game!")
 }
 
-quit_game = {
-    is_running <- 0
-    (renderer != 0) {
-        1 => sdl.SDL_DestroyRenderer(renderer)
-    }
-    (window != 0) {
-        1 => sdl.SDL_DestroyWindow(window)
-    }
-    sdl.SDL_Quit()
+greet = name -> {
+    println("Welcome, ")
+    println(name)
+    println("!")
 }
 
-clear_screen = color -> {
-    r := (color >>b 16) &b 0xFF
-    g := (color >>b 8) &b 0xFF
-    b := color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
-    sdl.SDL_RenderClear(renderer)
-}
+square = x -> x * x
 
-draw_rect = (x, y, w, h, color) -> {
-    r := (color >>b 16) &b 0xFF
-    g := (color >>b 8) &b 0xFF
-    b := color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
-    sdl.SDL_RenderFillRect(renderer, x, y, w, h)
-}
+add = (x, y) -> x + y
 
-present = {
-    sdl.SDL_RenderPresent(renderer)
-}
-
-delay = ms -> {
-    sdl.SDL_Delay(ms)
-}
-
-running = {
-    is_running
-}
+double = x -> x * 2

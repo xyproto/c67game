@@ -19,12 +19,3 @@ add = (a, b) -> {
 double = (x) -> {
     ret x * 2
 }
-
-countdown = (n) -> {
-    i = 0
-    @ i < n max 100 {
-        println(n - i)
-        i = i + 1
-    }
-    println("Blast off!")
-}

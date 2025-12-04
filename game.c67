@@ -2,23 +2,13 @@ export *
 
 import sdl3 as sdl
 
-temp_r := 0
-temp_g := 0
-temp_b := 0
-
 clear_screen = (renderer, color) -> {
-    temp_r <- color >>b 16 &b 0xFF
-    temp_g <- color >>b 8 &b 0xFF
-    temp_b <- color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, temp_r, temp_g, temp_b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, color >>b 16 &b 0xFF, color >>b 8 &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderClear(renderer)
 }
 
 draw_rect = (renderer, x, y, w, h, color) -> {
-    temp_r <- color >>b 16 &b 0xFF
-    temp_g <- color >>b 8 &b 0xFF
-    temp_b <- color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, temp_r, temp_g, temp_b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, color >>b 16 &b 0xFF, color >>b 8 &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderFillRect(renderer, x, y, w, h)
 }
 

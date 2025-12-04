@@ -9,7 +9,7 @@ greet = (name: str) -> {
 }
 
 countdown = (n: num) -> {
-    @ i in n + 1 {
+    @ i in 0..<(n + 1) {
         println(n - i)
     }
     println("Blast off!")

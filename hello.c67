@@ -1,3 +1,24 @@
+export *
+
 hello = {
-    println("hello c67game")
+    println("Hello from c67game!")
+}
+
+greet = name:str {
+    println("Hello, " + name + "!")
+}
+
+countdown = n:int {
+    loop i = n, i >= 0, i = i - 1 {
+        println(i)
+    }
+    println("Blast off!")
+}
+
+square = x:int -> int {
+    ret x * x
+}
+
+add = a:int, b:int -> int {
+    ret a + b
 }

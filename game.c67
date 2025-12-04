@@ -1,51 +1,51 @@
 export *
 
-import c.sdl3
+import "sdl3" as sdl
 
 window := 0
 renderer := 0
 is_running := 0
 
 init_game = (width, height, title) -> {
-    c.SDL_Init(0x00000020)
-    window <- c.SDL_CreateWindow(title, width, height, 0)
-    renderer <- c.SDL_CreateRenderer(window, 0)
+    sdl.SDL_Init(0x00000020)
+    window <- sdl.SDL_CreateWindow(title, width, height, 0)
+    renderer <- sdl.SDL_CreateRenderer(window, 0)
     is_running <- 1
 }
 
 quit_game = {
     is_running <- 0
     (renderer != 0) {
-        1 => c.SDL_DestroyRenderer(renderer)
+        1 => sdl.SDL_DestroyRenderer(renderer)
     }
     (window != 0) {
-        1 => c.SDL_DestroyWindow(window)
+        1 => sdl.SDL_DestroyWindow(window)
     }
-    c.SDL_Quit()
+    sdl.SDL_Quit()
 }
 
 clear_screen = color -> {
     r := (color >>b 16) &b 0xFF
     g := (color >>b 8) &b 0xFF
     b := color &b 0xFF
-    c.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
-    c.SDL_RenderClear(renderer)
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_RenderClear(renderer)
 }
 
 draw_rect = (x, y, w, h, color) -> {
     r := (color >>b 16) &b 0xFF
     g := (color >>b 8) &b 0xFF
     b := color &b 0xFF
-    c.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
-    c.SDL_RenderFillRect(renderer, x, y, w, h)
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_RenderFillRect(renderer, x, y, w, h)
 }
 
 present = {
-    c.SDL_RenderPresent(renderer)
+    sdl.SDL_RenderPresent(renderer)
 }
 
 delay = ms -> {
-    c.SDL_Delay(ms)
+    sdl.SDL_Delay(ms)
 }
 
 running = {

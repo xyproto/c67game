@@ -3,7 +3,7 @@ import "github.com/xyproto/c67game"
 main = () -> {
     println("Testing c67game library...")
     println("Calling init...")
-    window_result = init("Test", 320, 240)
+    init("Test", 320, 240)
     println("Calling delay...")
     delay(100)
     println("Calling quit...")

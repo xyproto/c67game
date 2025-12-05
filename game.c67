@@ -9,11 +9,11 @@ init_window = (title, width, height) -> {
     sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
         exitln("Failed to init SDL3")
     }
-    window = sdl.SDL_CreateWindow(title, width, height, 0) or! {
+    window := sdl.SDL_CreateWindow(title, width, height, 0) or! {
         exitln("Failed to create window")
     }
     g_window <- window
-    renderer = sdl.SDL_CreateRenderer(window, 0) or! {
+    renderer := sdl.SDL_CreateRenderer(window, 0) or! {
         exitln("Failed to create renderer")
     }
     g_renderer <- renderer
@@ -30,33 +30,33 @@ quit = {
 }
 
 clear_screen = (color) -> {
-    r = (color >>b 16) &b 255
-    g = (color >>b 8) &b 255
-    b = color &b 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderClear(g_renderer)
 }
 
 fill_rect = (x, y, w, h, color) -> {
-    r = (color >>b 16) &b 255
-    g = (color >>b 8) &b 255
-    b = color &b 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderFillRect(g_renderer, x, y, w, h)
 }
 
 draw_rect = (x, y, w, h, color) -> {
-    r = (color >>b 16) &b 255
-    g = (color >>b 8) &b 255
-    b = color &b 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderRect(g_renderer, x, y, w, h)
 }
 
 draw_line = (x1, y1, x2, y2, color) -> {
-    r = (color >>b 16) &b 255
-    g = (color >>b 8) &b 255
-    b = color &b 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderLine(g_renderer, x1, y1, x2, y2)
 }

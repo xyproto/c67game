@@ -29,33 +29,33 @@ quit() -> {
 }
 
 clear_screen(color) -> {
-    r := (color >> 16) & 255
-    g := (color >> 8) & 255
-    b := color & 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderClear(g_renderer)
 }
 
 fill_rect(x, y, w, h, color) -> {
-    r := (color >> 16) & 255
-    g := (color >> 8) & 255
-    b := color & 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderFillRect(g_renderer, x, y, w, h)
 }
 
 draw_rect(x, y, w, h, color) -> {
-    r := (color >> 16) & 255
-    g := (color >> 8) & 255
-    b := color & 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderRect(g_renderer, x, y, w, h)
 }
 
 draw_line(x1, y1, x2, y2, color) -> {
-    r := (color >> 16) & 255
-    g := (color >> 8) & 255
-    b := color & 255
+    r := (color >>b 16) &b 255
+    g := (color >>b 8) &b 255
+    b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     sdl.SDL_RenderLine(g_renderer, x1, y1, x2, y2)
 }

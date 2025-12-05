@@ -90,4 +90,27 @@ key_space = {
     g_keys[44] != 0
 }
 
+running = {
+    event = sdl.SDL_Event_new()
+    @ sdl.SDL_PollEvent(event) {
+        event_type = sdl.SDL_Event_type(event)
+        event_type == sdl.SDL_EVENT_QUIT {
+            sdl.SDL_Event_free(event)
+            0
+        } {
+            event_type == sdl.SDL_EVENT_KEY_DOWN or event_type == sdl.SDL_EVENT_KEY_UP {
+                scancode = sdl.SDL_Event_key_scancode(event)
+                scancode >= 0 and scancode < 512 {
+                    event_type == sdl.SDL_EVENT_KEY_DOWN {
+                        g_keys[scancode] <- 1
+                    } {
+                        g_keys[scancode] <- 0
+                    }
+                }
+            }
+        }
+    }
+    sdl.SDL_Event_free(event)
+    1
+}
 

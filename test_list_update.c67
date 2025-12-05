@@ -1,0 +1,6 @@
+main = {
+    nums := [0] * 10
+    nums[0] <- 42
+    println("nums[0] = ")
+    println(nums[0])
+}

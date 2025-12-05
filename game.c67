@@ -4,7 +4,6 @@ import "SDL3" as sdl
 
 g_window = 0
 g_renderer = 0
-g_keys :=: [0] * 512
 
 init_window = (title, width, height) -> {
     sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
@@ -70,46 +69,15 @@ delay = (ms) -> {
     sdl.SDL_Delay(ms)
 }
 
-key_left = {
-    g_keys[80] != 0
-}
-
-key_right = {
-    g_keys[79] != 0
-}
-
-key_down = {
-    g_keys[81] != 0
-}
-
-key_up = {
-    g_keys[82] != 0
-}
-
-key_space = {
-    g_keys[44] != 0
-}
-
 running = {
     event := sdl.SDL_Event_new()
+    result := 1
     @ sdl.SDL_PollEvent(event) max 100 {
         event_type := sdl.SDL_Event_type(event)
         event_type == sdl.SDL_EVENT_QUIT {
-            sdl.SDL_Event_free(event)
-            0
-        } {
-            event_type == sdl.SDL_EVENT_KEY_DOWN or event_type == sdl.SDL_EVENT_KEY_UP {
-                scancode := sdl.SDL_Event_key_scancode(event)
-                scancode >= 0 and scancode < 512 {
-                    event_type == sdl.SDL_EVENT_KEY_DOWN {
-                        g_keys[scancode] <- 1
-                    } {
-                        g_keys[scancode] <- 0
-                    }
-                }
-            }
+            result = 0
         }
     }
     sdl.SDL_Event_free(event)
-    1
+    result
 }

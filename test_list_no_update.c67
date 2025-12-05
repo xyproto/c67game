@@ -1,0 +1,5 @@
+main = {
+    nums := [0] * 10
+    println("nums[0] = ")
+    println(nums[0])
+}

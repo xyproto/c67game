@@ -1,9 +1,9 @@
 import "github.com/xyproto/c67game"
 
-main = () -> {
+main := () -> {
     println("Testing c67game library...")
-    println("Calling init...")
-    init("Test", 320, 240)
+    println("Calling init_window...")
+    init_window("Test", 320, 240)
     println("Calling delay...")
     delay(100)
     println("Calling quit...")
@@ -11,3 +11,5 @@ main = () -> {
     println("✓ Test passed!")
     0
 }
+
+main()

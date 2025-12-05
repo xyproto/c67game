@@ -63,7 +63,7 @@ get_ticks = () -> {
 
 key_pressed = (event, scancode) -> {
     event_type = c.load_i32(event)
-    (event_type == 768) && (c.load_i32(event + 24) == scancode)
+    (event_type == 768) & (c.load_i32(event + 24) == scancode)
 }
 
 quit_requested = event -> {

@@ -113,4 +113,3 @@ running = {
     sdl.SDL_Event_free(event)
     1
 }
-

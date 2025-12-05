@@ -1,13 +1,9 @@
-import sdl3 as sdl
+import "."
 
-test_init = () -> {
-    println("Testing basic SDL init...")
-    sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
-        exitln("SDL_Init failed")
+test_init = {
+    println("Testing init_window...")
+    init_window("Test Window", 640, 480) or! {
+        exitln("init_window failed")
     }
-    println("SDL_Init succeeded")
-    sdl.SDL_Quit()
-    println("✓ Test passed!")
+    println("✓ init_window succeeded")
 }
-
-test_init()

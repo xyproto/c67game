@@ -1,15 +1,11 @@
-import "github.com/xyproto/c67game"
+import "."
 
-main := () -> {
+test_game_library = {
     println("Testing c67game library...")
-    println("Calling init_window...")
-    init_window("Test", 320, 240)
-    println("Calling delay...")
+    init_window("Test", 320, 240) or! {
+        exitln("init_window failed")
+    }
     delay(100)
-    println("Calling quit...")
     quit()
     println("✓ Test passed!")
-    0
 }
-
-main()

@@ -2,14 +2,47 @@ export *
 
 import sdl3 as sdl
 
+init = (title, width, height) -> {
+    sdl.SDL_Init(0x00000020)
+    window = sdl.SDL_CreateWindow(title, width, height, 0)
+    renderer = sdl.SDL_CreateRenderer(window, 0)
+    [window, renderer]
+}
+
+quit = () -> {
+    sdl.SDL_Quit()
+}
+
 clear_screen = (renderer, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, color >>b 16 &b 0xFF, color >>b 8 &b 0xFF, color &b 0xFF, 255)
+    r = (color >>b 16) &b 0xFF
+    g = (color >>b 8) &b 0xFF
+    b = color &b 0xFF
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
     sdl.SDL_RenderClear(renderer)
 }
 
 draw_rect = (renderer, x, y, w, h, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, color >>b 16 &b 0xFF, color >>b 8 &b 0xFF, color &b 0xFF, 255)
+    r = (color >>b 16) &b 0xFF
+    g = (color >>b 8) &b 0xFF
+    b = color &b 0xFF
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
     sdl.SDL_RenderFillRect(renderer, x, y, w, h)
+}
+
+draw_line = (renderer, x1, y1, x2, y2, color) -> {
+    r = (color >>b 16) &b 0xFF
+    g = (color >>b 8) &b 0xFF
+    b = color &b 0xFF
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_RenderLine(renderer, x1, y1, x2, y2)
+}
+
+draw_point = (renderer, x, y, color) -> {
+    r = (color >>b 16) &b 0xFF
+    g = (color >>b 8) &b 0xFF
+    b = color &b 0xFF
+    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_RenderPoint(renderer, x, y)
 }
 
 present = renderer -> {
@@ -18,4 +51,22 @@ present = renderer -> {
 
 delay = ms -> {
     sdl.SDL_Delay(ms)
+}
+
+poll_event = event -> {
+    sdl.SDL_PollEvent(event)
+}
+
+get_ticks = () -> {
+    sdl.SDL_GetTicks()
+}
+
+key_pressed = (event, scancode) -> {
+    event_type = c.load_i32(event)
+    (event_type == 768) && (c.load_i32(event + 24) == scancode)
+}
+
+quit_requested = event -> {
+    event_type = c.load_i32(event)
+    event_type == 256
 }

@@ -61,12 +61,4 @@ get_ticks = () -> {
     sdl.SDL_GetTicks()
 }
 
-key_pressed = (event, scancode) -> {
-    event_type = c.load_i32(event)
-    (event_type == 768) ? (c.load_i32(event + 24) == scancode) : 0
-}
 
-quit_requested = event -> {
-    event_type = c.load_i32(event)
-    event_type == 256
-}

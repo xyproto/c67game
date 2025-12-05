@@ -6,7 +6,7 @@ g_window := 0
 g_renderer := 0
 g_keys := [0] * 512
 
-init_window(title, width, height) -> {
+init_window := (title, width, height) -> {
     sdl.SDL_Init(0x00000020) or! {
         exitln("Failed to init SDL3")
     }
@@ -18,7 +18,7 @@ init_window(title, width, height) -> {
     }
 }
 
-quit() -> {
+quit := () -> {
     g_renderer != 0 {
         sdl.SDL_DestroyRenderer(g_renderer)
     }
@@ -28,7 +28,7 @@ quit() -> {
     sdl.SDL_Quit()
 }
 
-clear_screen(color) -> {
+clear_screen := (color) -> {
     r := (color >>b 16) &b 255
     g := (color >>b 8) &b 255
     b := color &b 255
@@ -36,7 +36,7 @@ clear_screen(color) -> {
     sdl.SDL_RenderClear(g_renderer)
 }
 
-fill_rect(x, y, w, h, color) -> {
+fill_rect := (x, y, w, h, color) -> {
     r := (color >>b 16) &b 255
     g := (color >>b 8) &b 255
     b := color &b 255
@@ -44,7 +44,7 @@ fill_rect(x, y, w, h, color) -> {
     sdl.SDL_RenderFillRect(g_renderer, x, y, w, h)
 }
 
-draw_rect(x, y, w, h, color) -> {
+draw_rect := (x, y, w, h, color) -> {
     r := (color >>b 16) &b 255
     g := (color >>b 8) &b 255
     b := color &b 255
@@ -52,7 +52,7 @@ draw_rect(x, y, w, h, color) -> {
     sdl.SDL_RenderRect(g_renderer, x, y, w, h)
 }
 
-draw_line(x1, y1, x2, y2, color) -> {
+draw_line := (x1, y1, x2, y2, color) -> {
     r := (color >>b 16) &b 255
     g := (color >>b 8) &b 255
     b := color &b 255
@@ -60,31 +60,31 @@ draw_line(x1, y1, x2, y2, color) -> {
     sdl.SDL_RenderLine(g_renderer, x1, y1, x2, y2)
 }
 
-present() -> {
+present := () -> {
     sdl.SDL_RenderPresent(g_renderer)
 }
 
-delay(ms) -> {
+delay := (ms) -> {
     sdl.SDL_Delay(ms)
 }
 
-key_left() -> {
+key_left := () -> {
     g_keys[80] != 0
 }
 
-key_right() -> {
+key_right := () -> {
     g_keys[79] != 0
 }
 
-key_down() -> {
+key_down := () -> {
     g_keys[81] != 0
 }
 
-key_up() -> {
+key_up := () -> {
     g_keys[82] != 0
 }
 
-key_space() -> {
+key_space := () -> {
     g_keys[44] != 0
 }
 

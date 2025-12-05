@@ -2,53 +2,90 @@ export *
 
 import sdl3 as sdl
 
-init = (title, width, height) -> {
-    sdl.SDL_Init(0x00000020)
-    [sdl.SDL_CreateWindow(title, width, height, 0), 0]
+g_window := 0
+g_renderer := 0
+g_keys := [0] * 512
+
+init_window(title, width, height) -> {
+    sdl.SDL_Init(0x00000020) or! {
+        exitln("Failed to init SDL3")
+    }
+    g_window <- sdl.SDL_CreateWindow(title, width, height, 0) or! {
+        exitln("Failed to create window")
+    }
+    g_renderer <- sdl.SDL_CreateRenderer(g_window, 0) or! {
+        exitln("Failed to create renderer")
+    }
 }
 
-create_renderer = window -> {
-    sdl.SDL_CreateRenderer(window, 0)
-}
-
-quit = () -> {
+quit() -> {
+    g_renderer != 0 {
+        sdl.SDL_DestroyRenderer(g_renderer)
+    }
+    g_window != 0 {
+        sdl.SDL_DestroyWindow(g_window)
+    }
     sdl.SDL_Quit()
 }
 
-clear_screen = (renderer, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
-    sdl.SDL_RenderClear(renderer)
+clear_screen(color) -> {
+    r := (color >> 16) & 255
+    g := (color >> 8) & 255
+    b := color & 255
+    sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
+    sdl.SDL_RenderClear(g_renderer)
 }
 
-draw_rect = (renderer, x, y, w, h, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
-    sdl.SDL_RenderFillRect(renderer, x, y, w, h)
+fill_rect(x, y, w, h, color) -> {
+    r := (color >> 16) & 255
+    g := (color >> 8) & 255
+    b := color & 255
+    sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
+    sdl.SDL_RenderFillRect(g_renderer, x, y, w, h)
 }
 
-draw_line = (renderer, x1, y1, x2, y2, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
-    sdl.SDL_RenderLine(renderer, x1, y1, x2, y2)
+draw_rect(x, y, w, h, color) -> {
+    r := (color >> 16) & 255
+    g := (color >> 8) & 255
+    b := color & 255
+    sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
+    sdl.SDL_RenderRect(g_renderer, x, y, w, h)
 }
 
-draw_point = (renderer, x, y, color) -> {
-    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
-    sdl.SDL_RenderPoint(renderer, x, y)
+draw_line(x1, y1, x2, y2, color) -> {
+    r := (color >> 16) & 255
+    g := (color >> 8) & 255
+    b := color & 255
+    sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
+    sdl.SDL_RenderLine(g_renderer, x1, y1, x2, y2)
 }
 
-present = renderer -> {
-    sdl.SDL_RenderPresent(renderer)
+present() -> {
+    sdl.SDL_RenderPresent(g_renderer)
 }
 
-delay = ms -> {
+delay(ms) -> {
     sdl.SDL_Delay(ms)
 }
 
-poll_event = event -> {
-    sdl.SDL_PollEvent(event)
+key_left() -> {
+    g_keys[80] != 0
 }
 
-get_ticks = () -> {
-    sdl.SDL_GetTicks()
+key_right() -> {
+    g_keys[79] != 0
+}
+
+key_down() -> {
+    g_keys[81] != 0
+}
+
+key_up() -> {
+    g_keys[82] != 0
+}
+
+key_space() -> {
+    g_keys[44] != 0
 }
 
 

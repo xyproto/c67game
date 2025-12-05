@@ -1,7 +1,12 @@
+import "."
 test_list_update = {
     nums := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     nums[0] <- 42
     println("nums[0] = ")
     println(nums[0])
     (nums[0] == 42) or! { exit(1) }
+}
+
+main = {
+    test_list_update()
 }

@@ -16,34 +16,22 @@ quit = () -> {
 }
 
 clear_screen = (renderer, color) -> {
-    r = (color >>b 16) &b 0xFF
-    g = (color >>b 8) &b 0xFF
-    b = color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderClear(renderer)
 }
 
 draw_rect = (renderer, x, y, w, h, color) -> {
-    r = (color >>b 16) &b 0xFF
-    g = (color >>b 8) &b 0xFF
-    b = color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderFillRect(renderer, x, y, w, h)
 }
 
 draw_line = (renderer, x1, y1, x2, y2, color) -> {
-    r = (color >>b 16) &b 0xFF
-    g = (color >>b 8) &b 0xFF
-    b = color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderLine(renderer, x1, y1, x2, y2)
 }
 
 draw_point = (renderer, x, y, color) -> {
-    r = (color >>b 16) &b 0xFF
-    g = (color >>b 8) &b 0xFF
-    b = color &b 0xFF
-    sdl.SDL_SetRenderDrawColor(renderer, r, g, b, 255)
+    sdl.SDL_SetRenderDrawColor(renderer, (color >>b 16) &b 0xFF, (color >>b 8) &b 0xFF, color &b 0xFF, 255)
     sdl.SDL_RenderPoint(renderer, x, y)
 }
 

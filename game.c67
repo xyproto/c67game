@@ -2,8 +2,8 @@ export *
 
 import "SDL3" as sdl
 
-g_window = 0
-g_renderer = 0
+g_window := 0
+g_renderer := 0
 
 init_window = (title, width, height) -> {
     sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
@@ -69,12 +69,12 @@ delay = (ms) -> {
     sdl.SDL_Delay(ms)
 }
 
-g_key_left = 0
-g_key_right = 0
-g_key_down = 0
-g_key_up = 0
-g_key_space = 0
-g_running = 1
+g_key_left := 0
+g_key_right := 0
+g_key_down := 0
+g_key_up := 0
+g_key_space := 0
+g_running := 1
 
 poll_events = {
     g_key_left <- 0

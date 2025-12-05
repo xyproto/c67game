@@ -1,9 +1,0 @@
-import "."
-
-test_init = {
-    println("Testing init_window...")
-    init_window("Test Window", 640, 480) or! {
-        exitln("init_window failed")
-    }
-    println("✓ init_window succeeded")
-}

@@ -4,9 +4,11 @@ import sdl3 as sdl
 
 init = (title, width, height) -> {
     sdl.SDL_Init(0x00000020)
-    window = sdl.SDL_CreateWindow(title, width, height, 0)
-    renderer = sdl.SDL_CreateRenderer(window, 0)
-    [window, renderer]
+    [sdl.SDL_CreateWindow(title, width, height, 0), 0]
+}
+
+create_renderer = window -> {
+    sdl.SDL_CreateRenderer(window, 0)
 }
 
 quit = () -> {

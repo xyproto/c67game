@@ -1,11 +1,13 @@
 import "github.com/xyproto/c67game"
 
 main = () -> {
-    println("Testing c67game library initialization...")
-    result = init("Test Window", 320, 240)
-    println("✓ Window created successfully")
+    println("Testing c67game library...")
+    println("Calling init...")
+    window_result = init("Test", 320, 240)
+    println("Calling delay...")
     delay(100)
+    println("Calling quit...")
     quit()
-    println("✓ Test passed")
+    println("✓ Test passed!")
     0
 }

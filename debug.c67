@@ -1,0 +1,18 @@
+import sdl3 as sdl
+
+main := () -> {
+    println("About to call SDL_Init...")
+    result := sdl.SDL_Init(0x00000020)
+    println("SDL_Init returned:")
+    println(result)
+    result != 0 {
+        println("SDL_Init failed!")
+    }
+    result == 0 {
+        println("SDL_Init succeeded!")
+        sdl.SDL_Quit()
+    }
+    0
+}
+
+main()

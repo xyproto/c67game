@@ -7,7 +7,7 @@ g_renderer := 0
 g_keys := [0] * 512
 
 init_window := (title, width, height) -> {
-    sdl.SDL_Init(0x00000020) or! {
+    sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
         exitln("Failed to init SDL3")
     }
     g_window <- sdl.SDL_CreateWindow(title, width, height, 0) or! {

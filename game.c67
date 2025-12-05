@@ -1,6 +1,6 @@
 export *
 
-import sdl3 as sdl
+import "SDL3" as sdl
 
 g_window := 0
 g_renderer := 0

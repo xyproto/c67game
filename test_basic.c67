@@ -1,0 +1,13 @@
+import sdl3 as sdl
+
+test_init = () -> {
+    println("Testing basic SDL init...")
+    sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
+        exitln("SDL_Init failed")
+    }
+    println("SDL_Init succeeded")
+    sdl.SDL_Quit()
+    println("✓ Test passed!")
+}
+
+test_init()

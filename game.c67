@@ -69,15 +69,68 @@ delay = (ms) -> {
     sdl.SDL_Delay(ms)
 }
 
-running = {
+g_key_left = 0
+g_key_right = 0
+g_key_down = 0
+g_key_up = 0
+g_key_space = 0
+g_running = 1
+
+poll_events = {
+    g_key_left <- 0
+    g_key_right <- 0
+    g_key_down <- 0
+    g_key_up <- 0
+    g_key_space <- 0
+    
     event := sdl.SDL_Event_new()
-    result := 1
     @ sdl.SDL_PollEvent(event) max 100 {
         event_type := sdl.SDL_Event_type(event)
         event_type == sdl.SDL_EVENT_QUIT {
-            result = 0
+            g_running <- 0
+        }
+        event_type == sdl.SDL_EVENT_KEY_DOWN {
+            key := sdl.SDL_Event_key_keysym_sym(event)
+            key == sdl.SDLK_LEFT {
+                g_key_left <- 1
+            }
+            key == sdl.SDLK_RIGHT {
+                g_key_right <- 1
+            }
+            key == sdl.SDLK_DOWN {
+                g_key_down <- 1
+            }
+            key == sdl.SDLK_UP {
+                g_key_up <- 1
+            }
+            key == sdl.SDLK_SPACE {
+                g_key_space <- 1
+            }
         }
     }
     sdl.SDL_Event_free(event)
-    result
+}
+
+running = {
+    g_running
+}
+
+key_left = {
+    g_key_left
+}
+
+key_right = {
+    g_key_right
+}
+
+key_down = {
+    g_key_down
+}
+
+key_up = {
+    g_key_up
+}
+
+key_space = {
+    g_key_space
 }

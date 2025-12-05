@@ -2,9 +2,14 @@ export *
 
 import sdl3 as sdl
 
+// SDL3 Event type constants
+SDL_EVENT_QUIT = 0x100
+SDL_EVENT_KEY_DOWN = 0x300
+SDL_EVENT_KEY_UP = 0x301
+
 g_window = 0
 g_renderer = 0
-g_keys = [0] * 512
+g_keys := [0] * 512
 
 init_window = (title, width, height) -> {
     sdl.SDL_Init(sdl.SDL_INIT_VIDEO) or! {
@@ -94,14 +99,14 @@ running = {
     event := sdl.SDL_Event_new()
     @ sdl.SDL_PollEvent(event) max 100 {
         event_type := sdl.SDL_Event_type(event)
-        event_type == sdl.SDL_EVENT_QUIT {
+        event_type == SDL_EVENT_QUIT {
             sdl.SDL_Event_free(event)
             0
         } {
-            event_type == sdl.SDL_EVENT_KEY_DOWN or event_type == sdl.SDL_EVENT_KEY_UP {
+            event_type == SDL_EVENT_KEY_DOWN or event_type == SDL_EVENT_KEY_UP {
                 scancode := sdl.SDL_Event_key_scancode(event)
                 scancode >= 0 and scancode < 512 {
-                    event_type == sdl.SDL_EVENT_KEY_DOWN {
+                    event_type == SDL_EVENT_KEY_DOWN {
                         g_keys[scancode] <- 1
                     } {
                         g_keys[scancode] <- 0

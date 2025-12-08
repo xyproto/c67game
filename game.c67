@@ -2,6 +2,10 @@ export *
 
 import "SDL3" as sdl
 
+cstruct SDL_Event {
+    type as uint32
+}
+
 g_window := 0
 g_renderer := 0
 g_key_left := 0
@@ -102,8 +106,14 @@ poll_events = {
     g_key_up <- 0
     g_key_space <- 0
     
-    // TODO: Implement proper event polling with SDL_PollEvent
-    // For now, just return success
+    event := arena(SDL_Event.size)
+    sdl.SDL_PollEvent(event) > 0 {
+        event_type := unsafe { *event as uint32 }
+        event_type == sdl.SDL_EVENT_QUIT {
+            g_running <- 0
+        }
+        // TODO: Handle keyboard events
+    }
     0
 }
 

@@ -67,10 +67,10 @@ fill_rect = (x, y, w, h, color) -> {
     wf := w as float32
     hf := h as float32
     unsafe {
-        *rect <- xf
-        *(rect + 4) <- yf
-        *(rect + 8) <- wf
-        *(rect + 12) <- hf
+        [rect] <- xf
+        [rect + 4] <- yf
+        [rect + 8] <- wf
+        [rect + 12] <- hf
     }
     sdl.SDL_RenderFillRect(g_renderer, rect)
     0
@@ -87,10 +87,10 @@ draw_rect = (x, y, w, h, color) -> {
     wf := w as float32
     hf := h as float32
     unsafe {
-        *rect <- xf
-        *(rect + 4) <- yf
-        *(rect + 8) <- wf
-        *(rect + 12) <- hf
+        [rect] <- xf
+        [rect + 4] <- yf
+        [rect + 8] <- wf
+        [rect + 12] <- hf
     }
     sdl.SDL_RenderRect(g_renderer, rect)
     0

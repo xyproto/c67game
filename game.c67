@@ -145,11 +145,11 @@ poll_events = {
     event := alloc(SDL_Event.size)
     sdl.SDL_PollEvent(event) > 0 {
         event_type := unsafe uint32 {
-            [event] as uint32
+            rax <- [event]
         } {
-            [event] as uint32
+            x0 <- [event]
         } {
-            [event] as uint32
+            a0 <- [event]
         }
         event_type == sdl.SDL_EVENT_QUIT {
             g_running <- 0

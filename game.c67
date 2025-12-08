@@ -28,12 +28,12 @@ init_window = (title, width, height) -> {
         exitln("Failed to init SDL3")
     }
     w := sdl.SDL_CreateWindow(title, width, height, 0)
-    w == 0 {
+    w == 0 or! {
         exitln("Failed to create window")
     }
     g_window <- w
     r := sdl.SDL_CreateRenderer(w, 0)
-    r == 0 {
+    r == 0 or! {
         exitln("Failed to create renderer")
     }
     g_renderer <- r
@@ -68,21 +68,51 @@ fill_rect = (x, y, w, h, color) -> {
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     rect := alloc(16)
-    xf := x as float32
-    yf := y as float32
-    wf := w as float32
-    hf := h as float32
+    xf := unsafe float32 {
+        rax <- x
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- x
+        scvtf_s0_x0()
+    } {
+        a0 <- x
+        fcvt_s_w_fa0_a0()
+    }
+    yf := unsafe float32 {
+        rax <- y
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- y
+        scvtf_s0_x0()
+    } {
+        a0 <- y
+        fcvt_s_w_fa0_a0()
+    }
+    wf := unsafe float32 {
+        rax <- w
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- w
+        scvtf_s0_x0()
+    } {
+        a0 <- w
+        fcvt_s_w_fa0_a0()
+    }
+    hf := unsafe float32 {
+        rax <- h
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- h
+        scvtf_s0_x0()
+    } {
+        a0 <- h
+        fcvt_s_w_fa0_a0()
+    }
     unsafe ptr {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    } {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    } {
         [rect] <- xf
         [rect + 4] <- yf
         [rect + 8] <- wf
@@ -98,21 +128,51 @@ draw_rect = (x, y, w, h, color) -> {
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
     rect := alloc(16)
-    xf := x as float32
-    yf := y as float32
-    wf := w as float32
-    hf := h as float32
+    xf := unsafe float32 {
+        rax <- x
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- x
+        scvtf_s0_x0()
+    } {
+        a0 <- x
+        fcvt_s_w_fa0_a0()
+    }
+    yf := unsafe float32 {
+        rax <- y
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- y
+        scvtf_s0_x0()
+    } {
+        a0 <- y
+        fcvt_s_w_fa0_a0()
+    }
+    wf := unsafe float32 {
+        rax <- w
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- w
+        scvtf_s0_x0()
+    } {
+        a0 <- w
+        fcvt_s_w_fa0_a0()
+    }
+    hf := unsafe float32 {
+        rax <- h
+        movq_xmm0_rax()
+        cvtsi2ss_xmm0_xmm0()
+    } {
+        x0 <- h
+        scvtf_s0_x0()
+    } {
+        a0 <- h
+        fcvt_s_w_fa0_a0()
+    }
     unsafe ptr {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    } {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    } {
         [rect] <- xf
         [rect + 4] <- yf
         [rect + 8] <- wf

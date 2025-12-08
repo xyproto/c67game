@@ -61,12 +61,16 @@ fill_rect = (x, y, w, h, color) -> {
     g := (color >>b 8) &b 255
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
-    rect := alloc(SDL_FRect.size)
+    rect := alloc(16)
+    xf := x as float32
+    yf := y as float32
+    wf := w as float32
+    hf := h as float32
     unsafe {
-        *rect <- x as float32
-        *(rect + 4) <- y as float32
-        *(rect + 8) <- w as float32
-        *(rect + 12) <- h as float32
+        *rect <- xf
+        *(rect + 4) <- yf
+        *(rect + 8) <- wf
+        *(rect + 12) <- hf
     }
     sdl.SDL_RenderFillRect(g_renderer, rect)
     0
@@ -77,12 +81,16 @@ draw_rect = (x, y, w, h, color) -> {
     g := (color >>b 8) &b 255
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
-    rect := alloc(SDL_FRect.size)
+    rect := alloc(16)
+    xf := x as float32
+    yf := y as float32
+    wf := w as float32
+    hf := h as float32
     unsafe {
-        *rect <- x as float32
-        *(rect + 4) <- y as float32
-        *(rect + 8) <- w as float32
-        *(rect + 12) <- h as float32
+        *rect <- xf
+        *(rect + 4) <- yf
+        *(rect + 8) <- wf
+        *(rect + 12) <- hf
     }
     sdl.SDL_RenderRect(g_renderer, rect)
     0

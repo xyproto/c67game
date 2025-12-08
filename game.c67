@@ -100,20 +100,26 @@ delay = (ms) -> {
 }
 
 poll_events = {
+    println("poll_events: resetting keys...")
     g_key_left <- 0
     g_key_right <- 0
     g_key_down <- 0
     g_key_up <- 0
     g_key_space <- 0
     
+    println("poll_events: allocating event...")
     event := arena(SDL_Event.size)
+    println("poll_events: calling SDL_PollEvent...")
     sdl.SDL_PollEvent(event) > 0 {
+        println("poll_events: got event")
         event_type := unsafe { *event as uint32 }
+        printf("poll_events: event_type = %v\n", event_type)
         event_type == sdl.SDL_EVENT_QUIT {
+            println("poll_events: quit event")
             g_running <- 0
         }
-        // TODO: Handle keyboard events
     }
+    println("poll_events: done")
     0
 }
 

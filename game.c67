@@ -27,21 +27,22 @@ init_window = (title, width, height) -> {
     result != 0 or! {
         exitln("Failed to init SDL3")
     }
+    defer sdl.SDL_Quit()
+    
     w := sdl.SDL_CreateWindow(title, width, height, 0)
     w == 0 or! {
         exitln("Failed to create window")
     }
     g_window <- w
+    defer sdl.SDL_DestroyWindow(w)
+    
     r := sdl.SDL_CreateRenderer(w, 0)
     r == 0 or! {
         exitln("Failed to create renderer")
     }
     g_renderer <- r
-    0
-}
-
-quit = {
-    sdl.SDL_Quit()
+    defer sdl.SDL_DestroyRenderer(r)
+    
     0
 }
 

@@ -6,6 +6,13 @@ cstruct SDL_Event {
     type as uint32
 }
 
+cstruct SDL_FRect {
+    x as float
+    y as float
+    w as float
+    h as float
+}
+
 g_window := 0
 g_renderer := 0
 g_key_left := 0
@@ -67,7 +74,14 @@ fill_rect = (x, y, w, h, color) -> {
     g := (color >>b 8) &b 255
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
-    sdl.SDL_RenderFillRect(g_renderer, x, y, w, h)
+    rect := arena(SDL_FRect.size)
+    unsafe {
+        *(rect + 0) <- x as float
+        *(rect + 4) <- y as float
+        *(rect + 8) <- w as float
+        *(rect + 12) <- h as float
+    }
+    sdl.SDL_RenderFillRect(g_renderer, rect)
     0
 }
 
@@ -76,7 +90,14 @@ draw_rect = (x, y, w, h, color) -> {
     g := (color >>b 8) &b 255
     b := color &b 255
     sdl.SDL_SetRenderDrawColor(g_renderer, r, g, b, 255)
-    sdl.SDL_RenderRect(g_renderer, x, y, w, h)
+    rect := arena(SDL_FRect.size)
+    unsafe {
+        *(rect + 0) <- x as float
+        *(rect + 4) <- y as float
+        *(rect + 8) <- w as float
+        *(rect + 12) <- h as float
+    }
+    sdl.SDL_RenderRect(g_renderer, rect)
     0
 }
 

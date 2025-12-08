@@ -41,8 +41,14 @@ init_window = (title, width, height) -> {
 }
 
 quit = {
-    sdl.SDL_DestroyRenderer(g_renderer)
-    sdl.SDL_DestroyWindow(g_window)
+    g_renderer != 0 {
+        sdl.SDL_DestroyRenderer(g_renderer)
+        g_renderer <- 0
+    }
+    g_window != 0 {
+        sdl.SDL_DestroyWindow(g_window)
+        g_window <- 0
+    }
     sdl.SDL_Quit()
     0
 }

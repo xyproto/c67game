@@ -234,13 +234,8 @@ Poll_events = {
         event := alloc(SDL_Event.size)
         has_event := sdl.SDL_PollEvent(event)
         has_event > 0 {
-            event_type := unsafe uint32 {
-                rax <- [event]
-            } {
-                x0 <- [event]
-            } {
-                a0 <- [event]
-            }
+            // Read first 4 bytes (uint32) from event structure
+            event_type := event[0] as uint32
             event_type == sdl.SDL_EVENT_QUIT {
                 G_RUNNING <- 0
             }

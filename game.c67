@@ -28,6 +28,10 @@ G_INPUT_RIGHT := 0
 G_INPUT_ACTION1 := 0
 G_INPUT_ACTION2 := 0
 
+// Global rectangle buffer (4 floats = 16 bytes)
+// Since C67 stores everything as float64, we use a 4-element list and cast to floats
+G_RECT_BUFFER := [0.0, 0.0, 0.0, 0.0]
+
 Init_window = (title, width, height) -> {
     // Initialize SDL3 with video and gamepad support (returns true on success in SDL3)
     sdl_result := sdl.SDL_Init(sdl.SDL_INIT_VIDEO |b sdl.SDL_INIT_GAMEPAD)
@@ -69,13 +73,22 @@ Fill_rect = (x, y, w, h, color) -> {
     blue := color &b 255
     sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     
-    rect := alloc(16)
-    rect[0] <- x as float32
-    rect[4] <- y as float32
-    rect[8] <- w as float32
-    rect[12] <- h as float32
+    // Create a list with enough space, then write float32 values at correct offsets
+    // We need 16 contiguous bytes, but list format has [count][key][val][key][val]...
+    // So create a larger list and use an offset where we can fit 16 contiguous bytes
+    padding := [0, 0, 0, 0, 0, 0, 0, 0]  // 8 elements = enough space
     
-    sdl.SDL_RenderFillRect(G_RENDERER, rect)
+    // Point to somewhere in the list data where we have 16 contiguous bytes
+    // List is [count=8][key0=0][val0=0][key1=1][val1=0]...
+    // Offset 24 gives us 16 bytes before hitting the next structure
+    rect_ptr := padding as number + 24 as ptr
+    
+    rect_ptr[0] <- x as float32
+    rect_ptr[4] <- y as float32
+    rect_ptr[8] <- w as float32
+    rect_ptr[12] <- h as float32
+    
+    sdl.SDL_RenderFillRect(G_RENDERER, rect_ptr)
 }
 
 Draw_rect = (x, y, w, h, color) -> {

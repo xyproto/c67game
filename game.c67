@@ -73,22 +73,15 @@ Fill_rect = (x, y, w, h, color) -> {
     blue := color &b 255
     sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     
-    // Create a list with enough space, then write float32 values at correct offsets
-    // We need 16 contiguous bytes, but list format has [count][key][val][key][val]...
-    // So create a larger list and use an offset where we can fit 16 contiguous bytes
-    padding := [0, 0, 0, 0, 0, 0, 0, 0]  // 8 elements = enough space
-    
-    // Point to somewhere in the list data where we have 16 contiguous bytes
-    // List is [count=8][key0=0][val0=0][key1=1][val1=0]...
-    // Offset 24 gives us 16 bytes before hitting the next structure
-    rect_ptr := padding as number + 24 as ptr
-    
-    rect_ptr[0] <- x as float32
-    rect_ptr[4] <- y as float32
-    rect_ptr[8] <- w as float32
-    rect_ptr[12] <- h as float32
-    
-    sdl.SDL_RenderFillRect(G_RENDERER, rect_ptr)
+    arena {
+        rect := alloc(16)
+        rect[0] <- x as float32
+        rect[4] <- y as float32
+        rect[8] <- w as float32
+        rect[12] <- h as float32
+        
+        sdl.SDL_RenderFillRect(G_RENDERER, rect)
+    }
 }
 
 Draw_rect = (x, y, w, h, color) -> {
@@ -97,13 +90,15 @@ Draw_rect = (x, y, w, h, color) -> {
     blue := color &b 255
     sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     
-    rect := alloc(16)
-    rect[0] <- x as float32
-    rect[4] <- y as float32
-    rect[8] <- w as float32
-    rect[12] <- h as float32
-    
-    sdl.SDL_RenderRect(G_RENDERER, rect)
+    arena {
+        rect := alloc(16)
+        rect[0] <- x as float32
+        rect[4] <- y as float32
+        rect[8] <- w as float32
+        rect[12] <- h as float32
+        
+        sdl.SDL_RenderRect(G_RENDERER, rect)
+    }
 }
 
 Draw_line = (x1, y1, x2, y2, color) -> {
@@ -199,35 +194,37 @@ Poll_events = {
     }
     
     // Process SDL events
-    event := alloc(SDL_Event.size)
-    has_event := sdl.SDL_PollEvent(event)
-    has_event > 0 {
-        event_type := unsafe uint32 {
-            rax <- [event]
-        } {
-            x0 <- [event]
-        } {
-            a0 <- [event]
-        }
-        event_type == sdl.SDL_EVENT_QUIT {
-            G_RUNNING <- 0
-        }
-        event_type == sdl.SDL_EVENT_GAMEPAD_ADDED {
-            // Connect gamepad when added
-            G_GAMEPAD == 0 {
-                gamepad := sdl.SDL_OpenGamepad(0)
-                gamepad != 0 {
-                    G_GAMEPAD <- gamepad
-                    println("Gamepad connected!")
+    arena {
+        event := alloc(SDL_Event.size)
+        has_event := sdl.SDL_PollEvent(event)
+        has_event > 0 {
+            event_type := unsafe uint32 {
+                rax <- [event]
+            } {
+                x0 <- [event]
+            } {
+                a0 <- [event]
+            }
+            event_type == sdl.SDL_EVENT_QUIT {
+                G_RUNNING <- 0
+            }
+            event_type == sdl.SDL_EVENT_GAMEPAD_ADDED {
+                // Connect gamepad when added
+                G_GAMEPAD == 0 {
+                    gamepad := sdl.SDL_OpenGamepad(0)
+                    gamepad != 0 {
+                        G_GAMEPAD <- gamepad
+                        println("Gamepad connected!")
+                    }
                 }
             }
+            event_type == sdl.SDL_EVENT_GAMEPAD_REMOVED {
+                G_GAMEPAD <- 0
+                println("Gamepad disconnected!")
+            }
         }
-        event_type == sdl.SDL_EVENT_GAMEPAD_REMOVED {
-            G_GAMEPAD <- 0
-            println("Gamepad disconnected!")
-        }
+        has_event
     }
-    has_event
 }
 
 Running = {

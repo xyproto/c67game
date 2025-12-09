@@ -1,6 +1,6 @@
 export *
 
-import "SDL3" as sdl
+import sdl3 as sdl
 
 cstruct SDL_Event {
     type as uint32

@@ -2,8 +2,39 @@ export *
 
 import sdl3 as sdl
 
+// SDL_Event is a large union - allocate 256 bytes to be safe
 cstruct SDL_Event {
     type as uint32
+    padding1 as uint64
+    padding2 as uint64
+    padding3 as uint64
+    padding4 as uint64
+    padding5 as uint64
+    padding6 as uint64
+    padding7 as uint64
+    padding8 as uint64
+    padding9 as uint64
+    padding10 as uint64
+    padding11 as uint64
+    padding12 as uint64
+    padding13 as uint64
+    padding14 as uint64
+    padding15 as uint64
+    padding16 as uint64
+    padding17 as uint64
+    padding18 as uint64
+    padding19 as uint64
+    padding20 as uint64
+    padding21 as uint64
+    padding22 as uint64
+    padding23 as uint64
+    padding24 as uint64
+    padding25 as uint64
+    padding26 as uint64
+    padding27 as uint64
+    padding28 as uint64
+    padding29 as uint64
+    padding30 as uint64
 }
 
 cstruct SDL_FRect {

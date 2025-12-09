@@ -31,18 +31,18 @@ G_INPUT_ACTION2 := 0
 Init_window = (title, width, height) -> {
     // Initialize SDL3 with video and gamepad support
     sdl_result := sdl.SDL_Init(sdl.SDL_INIT_VIDEO |b sdl.SDL_INIT_GAMEPAD)
-    sdl_result != 0 or! {
+    sdl_result == 0 or! {
         exitln("Failed to init SDL3")
     }
     
     win := sdl.SDL_CreateWindow(title, width, height, 0)
-    win == 0 or! {
+    win or! {
         exitln("Failed to create window")
     }
     G_WINDOW <- win
     
     rend := sdl.SDL_CreateRenderer(win, 0)
-    rend == 0 or! {
+    rend or! {
         exitln("Failed to create renderer")
     }
     G_RENDERER <- rend

@@ -165,16 +165,16 @@ Poll_events = {
         // SDL_GetKeyboardState returns pointer to byte array, read byte at offset
         // Since ptr[offset] reads 8 bytes, we use ptr <- to write and unsafe reads for bytes
         // For now, just skip keyboard input to avoid the crash
-        shadow key_up := 0
-        shadow key_down := 0
-        shadow key_left := 0
-        shadow key_right := 0
-        shadow key_w := 0
-        shadow key_s := 0
-        shadow key_a := 0
-        shadow key_d := 0
-        shadow key_space := 0
-        shadow key_shift := 0
+        key_up := 0
+        key_down := 0
+        key_left := 0
+        key_right := 0
+        key_w := 0
+        key_s := 0
+        key_a := 0
+        key_d := 0
+        key_space := 0
+        key_shift := 0
         
         // Combine keyboard inputs
         (key_up != 0 |b key_w != 0) {

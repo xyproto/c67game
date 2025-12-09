@@ -229,33 +229,9 @@ Poll_events = {
         }
     }
     
-    // Process SDL events
-    arena {
-        event := alloc(SDL_Event.size)
-        has_event := sdl.SDL_PollEvent(event)
-        has_event > 0 {
-            // Read first 4 bytes (uint32) from event structure
-            event_type := event[0] as uint32
-            event_type == sdl.SDL_EVENT_QUIT {
-                G_RUNNING <- 0
-            }
-            event_type == sdl.SDL_EVENT_GAMEPAD_ADDED {
-                // Connect gamepad when added
-                G_GAMEPAD == 0 {
-                    gamepad := sdl.SDL_OpenGamepad(0)
-                    gamepad != 0 {
-                        G_GAMEPAD <- gamepad
-                        println("Gamepad connected!")
-                    }
-                }
-            }
-            event_type == sdl.SDL_EVENT_GAMEPAD_REMOVED {
-                G_GAMEPAD <- 0
-                println("Gamepad disconnected!")
-            }
-        }
-        has_event
-    }
+    // Process SDL events - simplified for now
+    // TODO: properly handle events when ptr[byte_offset] <- value syntax works
+    0
 }
 
 Running = {

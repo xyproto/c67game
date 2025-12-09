@@ -104,15 +104,8 @@ Fill_rect = (x, y, w, h, color) -> {
     blue := color &b 255
     sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     
-    arena {
-        rect := alloc(16)
-        rect[0] <- x as float32
-        rect[4] <- y as float32
-        rect[8] <- w as float32
-        rect[12] <- h as float32
-        
-        sdl.SDL_RenderFillRect(G_RENDERER, rect)
-    }
+    // TODO: implement rect rendering when ptr[offset] <- value as float32 syntax is fully supported
+    // For now, just set the color (which works for clearing)
 }
 
 Draw_rect = (x, y, w, h, color) -> {
@@ -121,15 +114,7 @@ Draw_rect = (x, y, w, h, color) -> {
     blue := color &b 255
     sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     
-    arena {
-        rect := alloc(16)
-        rect[0] <- x as float32
-        rect[4] <- y as float32
-        rect[8] <- w as float32
-        rect[12] <- h as float32
-        
-        sdl.SDL_RenderRect(G_RENDERER, rect)
-    }
+    // TODO: implement rect rendering when ptr[offset] <- value as float32 syntax is fully supported
 }
 
 Draw_line = (x1, y1, x2, y2, color) -> {

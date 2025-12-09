@@ -1,0 +1,9 @@
+// c67game library tests
+// Run with: c67 test
+// For detailed testing, see ~/clones/c67/c67game_test.go
+
+import "game.c67"
+
+test_basic = {
+    println("c67game library compiles successfully")
+}

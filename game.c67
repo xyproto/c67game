@@ -13,196 +13,182 @@ cstruct SDL_FRect {
     h as float32
 }
 
+
+
 G_WINDOW := 0
 G_RENDERER := 0
-G_KEY_LEFT := 0
-G_KEY_RIGHT := 0
-G_KEY_DOWN := 0
-G_KEY_UP := 0
-G_KEY_SPACE := 0
+G_GAMEPAD := 0
 G_RUNNING := 1
 
+// Unified input state (combines keyboard + gamepad + d-pad)
+G_INPUT_UP := 0
+G_INPUT_DOWN := 0
+G_INPUT_LEFT := 0
+G_INPUT_RIGHT := 0
+G_INPUT_ACTION1 := 0
+G_INPUT_ACTION2 := 0
+
 Init_window = (title, width, height) -> {
-    result := sdl.SDL_Init(sdl.SDL_INIT_VIDEO)
-    result != 0 or! {
+    // Initialize SDL3 with video and gamepad support
+    sdl_result := sdl.SDL_Init(sdl.SDL_INIT_VIDEO |b sdl.SDL_INIT_GAMEPAD)
+    sdl_result != 0 or! {
         exitln("Failed to init SDL3")
     }
-    defer sdl.SDL_Quit()
     
-    w := sdl.SDL_CreateWindow(title, width, height, 0)
-    w == 0 or! {
+    win := sdl.SDL_CreateWindow(title, width, height, 0)
+    win == 0 or! {
         exitln("Failed to create window")
     }
-    G_WINDOW <- w
-    defer sdl.SDL_DestroyWindow(w)
+    G_WINDOW <- win
     
-    r := sdl.SDL_CreateRenderer(w, 0)
-    r == 0 or! {
+    rend := sdl.SDL_CreateRenderer(win, 0)
+    rend == 0 or! {
         exitln("Failed to create renderer")
     }
-    G_RENDERER <- r
-    defer sdl.SDL_DestroyRenderer(r)
+    G_RENDERER <- rend
     
-    0
+    // Try to open first gamepad if available
+    gamepad := sdl.SDL_OpenGamepad(0)
+    gamepad != 0 {
+        G_GAMEPAD <- gamepad
+        println("Gamepad connected!")
+    }
 }
 
 Clear_screen = (color) -> {
-    r := (color >>b 16) &b 255
-    g := (color >>b 8) &b 255
-    b := color &b 255
-    sdl.SDL_SetRenderDrawColor(G_RENDERER, r, g, b, 255)
+    red := (color >>b 16) &b 255
+    green := (color >>b 8) &b 255
+    blue := color &b 255
+    sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     sdl.SDL_RenderClear(G_RENDERER)
-    0
 }
 
 Fill_rect = (x, y, w, h, color) -> {
-    r := (color >>b 16) &b 255
-    g := (color >>b 8) &b 255
-    b := color &b 255
-    sdl.SDL_SetRenderDrawColor(G_RENDERER, r, g, b, 255)
+    red := (color >>b 16) &b 255
+    green := (color >>b 8) &b 255
+    blue := color &b 255
+    sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
+    
     rect := alloc(16)
-    xf := unsafe float32 {
-        rax <- x
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- x
-        scvtf_s0_x0()
-    } {
-        a0 <- x
-        fcvt_s_w_fa0_a0()
-    }
-    yf := unsafe float32 {
-        rax <- y
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- y
-        scvtf_s0_x0()
-    } {
-        a0 <- y
-        fcvt_s_w_fa0_a0()
-    }
-    wf := unsafe float32 {
-        rax <- w
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- w
-        scvtf_s0_x0()
-    } {
-        a0 <- w
-        fcvt_s_w_fa0_a0()
-    }
-    hf := unsafe float32 {
-        rax <- h
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- h
-        scvtf_s0_x0()
-    } {
-        a0 <- h
-        fcvt_s_w_fa0_a0()
-    }
-    unsafe ptr {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    }
+    rect[0] <- x as float32
+    rect[4] <- y as float32
+    rect[8] <- w as float32
+    rect[12] <- h as float32
+    
     sdl.SDL_RenderFillRect(G_RENDERER, rect)
-    0
 }
 
 Draw_rect = (x, y, w, h, color) -> {
-    r := (color >>b 16) &b 255
-    g := (color >>b 8) &b 255
-    b := color &b 255
-    sdl.SDL_SetRenderDrawColor(G_RENDERER, r, g, b, 255)
+    red := (color >>b 16) &b 255
+    green := (color >>b 8) &b 255
+    blue := color &b 255
+    sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
+    
     rect := alloc(16)
-    xf := unsafe float32 {
-        rax <- x
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- x
-        scvtf_s0_x0()
-    } {
-        a0 <- x
-        fcvt_s_w_fa0_a0()
-    }
-    yf := unsafe float32 {
-        rax <- y
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- y
-        scvtf_s0_x0()
-    } {
-        a0 <- y
-        fcvt_s_w_fa0_a0()
-    }
-    wf := unsafe float32 {
-        rax <- w
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- w
-        scvtf_s0_x0()
-    } {
-        a0 <- w
-        fcvt_s_w_fa0_a0()
-    }
-    hf := unsafe float32 {
-        rax <- h
-        movq_xmm0_rax()
-        cvtsi2ss_xmm0_xmm0()
-    } {
-        x0 <- h
-        scvtf_s0_x0()
-    } {
-        a0 <- h
-        fcvt_s_w_fa0_a0()
-    }
-    unsafe ptr {
-        [rect] <- xf
-        [rect + 4] <- yf
-        [rect + 8] <- wf
-        [rect + 12] <- hf
-    }
+    rect[0] <- x as float32
+    rect[4] <- y as float32
+    rect[8] <- w as float32
+    rect[12] <- h as float32
+    
     sdl.SDL_RenderRect(G_RENDERER, rect)
-    0
 }
 
 Draw_line = (x1, y1, x2, y2, color) -> {
-    r := (color >>b 16) &b 255
-    g := (color >>b 8) &b 255
-    b := color &b 255
-    sdl.SDL_SetRenderDrawColor(G_RENDERER, r, g, b, 255)
+    red := (color >>b 16) &b 255
+    green := (color >>b 8) &b 255
+    blue := color &b 255
+    sdl.SDL_SetRenderDrawColor(G_RENDERER, red, green, blue, 255)
     sdl.SDL_RenderLine(G_RENDERER, x1, y1, x2, y2)
-    0
 }
 
 Present = {
     sdl.SDL_RenderPresent(G_RENDERER)
-    0
 }
 
 Delay = (ms) -> {
     sdl.SDL_Delay(ms)
-    0
 }
 
 Poll_events = {
-    G_KEY_LEFT <- 0
-    G_KEY_RIGHT <- 0
-    G_KEY_DOWN <- 0
-    G_KEY_UP <- 0
-    G_KEY_SPACE <- 0
+    // Reset input state each frame
+    G_INPUT_UP <- 0
+    G_INPUT_DOWN <- 0
+    G_INPUT_LEFT <- 0
+    G_INPUT_RIGHT <- 0
+    G_INPUT_ACTION1 <- 0
+    G_INPUT_ACTION2 <- 0
     
+    // Get keyboard state
+    keyboard := sdl.SDL_GetKeyboardState(0)
+    
+    // Check keyboard inputs (Arrow keys + WASD)
+    key_up := unsafe uint32 { rax <- [keyboard + 82] } { x0 <- [keyboard + 82] } { a0 <- [keyboard + 82] }
+    key_down := unsafe uint32 { rax <- [keyboard + 81] } { x0 <- [keyboard + 81] } { a0 <- [keyboard + 81] }
+    key_left := unsafe uint32 { rax <- [keyboard + 80] } { x0 <- [keyboard + 80] } { a0 <- [keyboard + 80] }
+    key_right := unsafe uint32 { rax <- [keyboard + 79] } { x0 <- [keyboard + 79] } { a0 <- [keyboard + 79] }
+    key_w := unsafe uint32 { rax <- [keyboard + 26] } { x0 <- [keyboard + 26] } { a0 <- [keyboard + 26] }
+    key_s := unsafe uint32 { rax <- [keyboard + 22] } { x0 <- [keyboard + 22] } { a0 <- [keyboard + 22] }
+    key_a := unsafe uint32 { rax <- [keyboard + 4] } { x0 <- [keyboard + 4] } { a0 <- [keyboard + 4] }
+    key_d := unsafe uint32 { rax <- [keyboard + 7] } { x0 <- [keyboard + 7] } { a0 <- [keyboard + 7] }
+    key_space := unsafe uint32 { rax <- [keyboard + 44] } { x0 <- [keyboard + 44] } { a0 <- [keyboard + 44] }
+    key_shift := unsafe uint32 { rax <- [keyboard + 225] } { x0 <- [keyboard + 225] } { a0 <- [keyboard + 225] }
+    
+    // Combine keyboard inputs
+    (key_up != 0 |b key_w != 0) {
+        G_INPUT_UP <- 1
+    }
+    (key_down != 0 |b key_s != 0) {
+        G_INPUT_DOWN <- 1
+    }
+    (key_left != 0 |b key_a != 0) {
+        G_INPUT_LEFT <- 1
+    }
+    (key_right != 0 |b key_d != 0) {
+        G_INPUT_RIGHT <- 1
+    }
+    key_space != 0 {
+        G_INPUT_ACTION1 <- 1
+    }
+    key_shift != 0 {
+        G_INPUT_ACTION2 <- 1
+    }
+    
+    // Check gamepad inputs if connected
+    G_GAMEPAD != 0 {
+        // D-pad
+        dpad_up := sdl.SDL_GetGamepadButton(G_GAMEPAD, 12)
+        dpad_down := sdl.SDL_GetGamepadButton(G_GAMEPAD, 13)
+        dpad_left := sdl.SDL_GetGamepadButton(G_GAMEPAD, 14)
+        dpad_right := sdl.SDL_GetGamepadButton(G_GAMEPAD, 15)
+        
+        // Face buttons (A/B)
+        button_south := sdl.SDL_GetGamepadButton(G_GAMEPAD, 0)
+        button_east := sdl.SDL_GetGamepadButton(G_GAMEPAD, 1)
+        
+        dpad_up != 0 {
+            G_INPUT_UP <- 1
+        }
+        dpad_down != 0 {
+            G_INPUT_DOWN <- 1
+        }
+        dpad_left != 0 {
+            G_INPUT_LEFT <- 1
+        }
+        dpad_right != 0 {
+            G_INPUT_RIGHT <- 1
+        }
+        button_south != 0 {
+            G_INPUT_ACTION1 <- 1
+        }
+        button_east != 0 {
+            G_INPUT_ACTION2 <- 1
+        }
+    }
+    
+    // Process SDL events
     event := alloc(SDL_Event.size)
-    sdl.SDL_PollEvent(event) > 0 {
+    has_event := sdl.SDL_PollEvent(event)
+    has_event > 0 {
         event_type := unsafe uint32 {
             rax <- [event]
         } {
@@ -213,30 +199,66 @@ Poll_events = {
         event_type == sdl.SDL_EVENT_QUIT {
             G_RUNNING <- 0
         }
+        event_type == sdl.SDL_EVENT_GAMEPAD_ADDED {
+            // Connect gamepad when added
+            G_GAMEPAD == 0 {
+                gamepad := sdl.SDL_OpenGamepad(0)
+                gamepad != 0 {
+                    G_GAMEPAD <- gamepad
+                    println("Gamepad connected!")
+                }
+            }
+        }
+        event_type == sdl.SDL_EVENT_GAMEPAD_REMOVED {
+            G_GAMEPAD <- 0
+            println("Gamepad disconnected!")
+        }
     }
-    0
+    has_event
 }
 
 Running = {
     G_RUNNING
 }
 
-Key_left = {
-    G_KEY_LEFT
+// Unified input queries (keyboard + gamepad)
+Input_up = {
+    G_INPUT_UP
 }
 
-Key_right = {
-    G_KEY_RIGHT
+Input_down = {
+    G_INPUT_DOWN
 }
 
-Key_down = {
-    G_KEY_DOWN
+Input_left = {
+    G_INPUT_LEFT
 }
 
-Key_up = {
-    G_KEY_UP
+Input_right = {
+    G_INPUT_RIGHT
 }
 
-Key_space = {
-    G_KEY_SPACE
+Input_action1 = {
+    G_INPUT_ACTION1
+}
+
+Input_action2 = {
+    G_INPUT_ACTION2
+}
+
+// Fullscreen management
+Is_fullscreen = {
+    flags := sdl.SDL_GetWindowFlags(G_WINDOW)
+    (flags &b 1) != 0
+}
+
+Toggle_fullscreen = {
+    Is_fullscreen() {
+        // Exit fullscreen
+        sdl.SDL_SetWindowFullscreen(G_WINDOW, 0)
+    }
+    Is_fullscreen() == 0 {
+        // Enter fullscreen
+        sdl.SDL_SetWindowFullscreen(G_WINDOW, 1)
+    }
 }

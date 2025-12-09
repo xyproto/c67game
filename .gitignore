@@ -1,0 +1,19 @@
+# Build artifacts
+*.exe
+game_lib
+c67game_test
+test_*
+
+# SDL3 binaries (users should install SDL3 separately)
+# Keep SDL3.dll for Windows development convenience
+# SDL3.dll
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
